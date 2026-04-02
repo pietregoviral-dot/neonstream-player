@@ -1,4 +1,5 @@
 // Globals and State
+const YOUTUBE_API_KEY = "AIzaSyDX5pI7doyQx37qgLZjFgkdjmo1iNoHbbY";
 let ytPlayer;
 let isPlayerReady = false;
 let currentVideoId = null;
