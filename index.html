@@ -30,20 +30,13 @@
                 <input type="text" id="searchInput" placeholder="O que você quer ouvir?" required autocomplete="off">
                 <button type="submit" class="hidden">Buscar</button>
             </form>
-
-            <div class="header-actions">
-                <button id="settingsBtn" class="icon-btn" title="Configurar API Key">
-                    <i class="fa-solid fa-gear"></i>
-                </button>
-            </div>
         </header>
 
         <!-- Main Content Area -->
         <main class="main-content">
             <div id="welcomeState" class="state-container">
                 <h2>Seja bem-vindo ao NeonStream</h2>
-                <p>Busque suas músicas favoritas acima. Precisaremos da API Key configurada nas <i
-                        class="fa-solid fa-gear"></i> engrenagens para funcionar.</p>
+                <p>Busque suas músicas favoritas na barra acima e comece a ouvir instantaneamente.</p>
                 <div class="pulse-circle"></div>
             </div>
 
@@ -102,27 +95,14 @@
         </footer>
     </div>
 
-    <!-- API Key Modal -->
-    <div id="apiModal" class="modal-overlay hidden">
-        <div class="modal">
-            <div class="modal-header">
-                <h3>Configuração do YT Data API</h3>
-                <button id="closeModalBtn" class="close-btn"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            <div class="modal-body">
-                <p>Para buscar músicas, insira sua chave da API v3 do YouTube. Ela será salva apenas no seu navegador
-                    local via LocalStorage.</p>
-                <div class="input-group">
-                    <input type="password" id="apiKeyInput" placeholder="AIzaSy...">
-                    <button type="button" id="toggleVisibilityBtn"><i class="fa-regular fa-eye"></i></button>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button id="saveApiBtn" class="btn-primary">Salvar Chave</button>
-            </div>
-        </div>
-    </div>
 
+
+    <!-- YouTube IFrame API Script -->
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <script src="app.js"></script>
+</body>
+
+</html>
     <!-- YouTube IFrame API Script -->
     <script src="https://www.youtube.com/iframe_api"></script>
     <script src="app.js"></script>
