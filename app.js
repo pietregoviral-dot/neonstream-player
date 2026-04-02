@@ -1,5 +1,6 @@
 // Globals and State
 const YOUTUBE_API_KEY = "AIzaSyDX5pI7doyQx37qgLZjFgkdjmo1iNoHbbY";
+
 let ytPlayer;
 let isPlayerReady = false;
 let currentVideoId = null;
@@ -45,9 +46,9 @@ const currentChannel = document.getElementById('currentChannel');
 // Esta função é chamada automaticamente pelo script da API do YouTube
 function onYouTubeIframeAPIReady() {
     ytPlayer = new YT.Player('youtube-player', {
-        height: '100', 
+        height: '100',
         width: '100',
-        videoId: '', 
+        videoId: '',
         playerVars: {
             'autoplay': 0,
             'controls': 0,
@@ -98,9 +99,9 @@ function playVideo(videoObj) {
         alert("O player ainda está carregando. Tente novamente em alguns segundos.");
         return;
     }
-    
+
     currentVideoId = videoObj.id.videoId || videoObj.id;
-    
+
     // Atualiza Visual do Player
     currentThumb.src = videoObj.snippet.thumbnails.high.url;
     currentThumb.classList.remove('hidden');
@@ -110,7 +111,7 @@ function playVideo(videoObj) {
 
     // Remove disabled dos botões
     playPauseBtn.removeAttribute('disabled');
-    
+
     // Inicia Som
     ytPlayer.loadVideoById(currentVideoId);
     ytPlayer.playVideo();
@@ -118,7 +119,7 @@ function playVideo(videoObj) {
 
 playPauseBtn.addEventListener('click', () => {
     if (!isPlayerReady || !currentVideoId) return;
-    
+
     const state = ytPlayer.getPlayerState();
     if (state === YT.PlayerState.PLAYING) {
         ytPlayer.pauseVideo();
@@ -128,8 +129,8 @@ playPauseBtn.addEventListener('click', () => {
 });
 
 function updatePlayPauseBtn(isPlaying) {
-    playPauseBtn.innerHTML = isPlaying 
-        ? '<i class="fa-solid fa-pause"></i>' 
+    playPauseBtn.innerHTML = isPlaying
+        ? '<i class="fa-solid fa-pause"></i>'
         : '<i class="fa-solid fa-play"></i>';
 }
 
@@ -141,7 +142,7 @@ function playNext() {
 
 function playPrev() {
     if (playlist.length === 0 || currentIndex === -1) return;
-    
+
     const currentT = ytPlayer.getCurrentTime();
     // Se tocou mais de 3 segundos, volta para o início da música. Senão vai pra anterior.
     if (currentT > 3) {
@@ -167,7 +168,7 @@ function startProgressInterval() {
         if (isDraggingProgress) return;
         const current = ytPlayer.getCurrentTime();
         const duration = ytPlayer.getDuration();
-        
+
         if (duration > 0) {
             const percent = (current / duration) * 100;
             progressBarFill.style.width = `${percent}%`;
@@ -194,7 +195,7 @@ volumeSlider.addEventListener('input', (e) => {
     if (!isPlayerReady) return;
     const vol = e.target.value;
     ytPlayer.setVolume(vol);
-    if(ytPlayer.isMuted()) ytPlayer.unMute();
+    if (ytPlayer.isMuted()) ytPlayer.unMute();
     updateVolumeIcon(vol);
 });
 
@@ -226,6 +227,9 @@ function formatTime(seconds) {
 
 // 4. API Key Management
 function getApiKey() {
+    if (YOUTUBE_API_KEY !== "COLE_SUA_API_KEY_AQUI" && YOUTUBE_API_KEY.trim() !== "") {
+        return YOUTUBE_API_KEY;
+    }
     return localStorage.getItem('yt_api_key');
 }
 
@@ -254,7 +258,7 @@ saveApiBtn.addEventListener('click', () => {
     if (key) {
         localStorage.setItem('yt_api_key', key);
         apiModal.classList.add('hidden');
-        
+
         // Se havia uma busca pendente/falha, tentamos limpar a tela inicial
         if (searchInput.value.trim()) {
             searchForm.dispatchEvent(new Event('submit'));
@@ -279,14 +283,7 @@ searchForm.addEventListener('submit', async (e) => {
     const query = searchInput.value.trim();
     if (!query) return;
 
-    const apiKey = getApiKey();
-    if (!apiKey) {
-        alert("Ops! Precisamos da sua YouTube Data API Key para buscar resultados.\nAbra as configurações (engrenagem no canto superior direito) para informar sua chave.");
-        apiModal.classList.remove('hidden');
-        return;
-    }
-
-    performSearch(query, apiKey);
+    performSearch(query, YOUTUBE_API_KEY);
 });
 
 async function performSearch(query, apiKey) {
@@ -306,13 +303,13 @@ async function performSearch(query, apiKey) {
 
         playlist = data.items;
         renderResults(playlist);
-        
+
         loadingState.classList.add('hidden');
         resultsSection.classList.remove('hidden');
 
     } catch (error) {
         console.error("Search Error:", error);
-        
+
         // Verifica se é erro de cota ou chave inválida
         if (error.message.includes("API key not valid") || error.message.includes("quota")) {
             alert("Erro na API Key. Pode ser inválida ou atingiu o limite de consultas.");
@@ -320,7 +317,7 @@ async function performSearch(query, apiKey) {
         } else {
             alert("Erro ao buscar: " + error.message);
         }
-        
+
         loadingState.classList.add('hidden');
         welcomeState.classList.remove('hidden');
     }
@@ -339,7 +336,7 @@ function renderResults(items) {
         const card = document.createElement('div');
         card.className = 'music-card';
         card.dataset.index = index;
-        
+
         card.innerHTML = `
             <img class="card-thumb" src="${item.snippet.thumbnails.medium.url}" alt="Thumbnail">
             <div class="card-play-overlay">
