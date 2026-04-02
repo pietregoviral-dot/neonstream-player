@@ -1,6 +1,6 @@
 // Globals and State
 // Globals and State
-const YOUTUBE_API_KEY = "AIzaSyDX5pI7doyQx37qgLZjFgkdjmo1iNoHbbY";
+const YOUTUBE_API_KEY = "";
 
 let ytPlayer;
 let isPlayerReady = false;
