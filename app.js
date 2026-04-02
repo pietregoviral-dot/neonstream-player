@@ -1,4 +1,5 @@
 // Globals and State
+// Globals and State
 const YOUTUBE_API_KEY = "AIzaSyDX5pI7doyQx37qgLZjFgkdjmo1iNoHbbY";
 
 let ytPlayer;
@@ -17,13 +18,6 @@ const loadingState = document.getElementById('loadingState');
 const resultsSection = document.getElementById('resultsSection');
 const resultsGrid = document.getElementById('resultsGrid');
 
-// Modal Elements
-const settingsBtn = document.getElementById('settingsBtn');
-const apiModal = document.getElementById('apiModal');
-const closeModalBtn = document.getElementById('closeModalBtn');
-const apiKeyInput = document.getElementById('apiKeyInput');
-const saveApiBtn = document.getElementById('saveApiBtn');
-const toggleVisibilityBtn = document.getElementById('toggleVisibilityBtn');
 
 // Player Elements
 const playPauseBtn = document.getElementById('playPauseBtn');
@@ -225,50 +219,6 @@ function formatTime(seconds) {
     return `${min}:${sec.toString().padStart(2, '0')}`;
 }
 
-// 4. API Key Management
-function getApiKey() {
-    if (YOUTUBE_API_KEY !== "COLE_SUA_API_KEY_AQUI" && YOUTUBE_API_KEY.trim() !== "") {
-        return YOUTUBE_API_KEY;
-    }
-    return localStorage.getItem('yt_api_key');
-}
-
-settingsBtn.addEventListener('click', () => {
-    const key = getApiKey();
-    if (key) apiKeyInput.value = key;
-    apiModal.classList.remove('hidden');
-});
-
-closeModalBtn.addEventListener('click', () => {
-    apiModal.classList.add('hidden');
-});
-
-toggleVisibilityBtn.addEventListener('click', () => {
-    if (apiKeyInput.type === 'password') {
-        apiKeyInput.type = 'text';
-        toggleVisibilityBtn.innerHTML = '<i class="fa-regular fa-eye-slash"></i>';
-    } else {
-        apiKeyInput.type = 'password';
-        toggleVisibilityBtn.innerHTML = '<i class="fa-regular fa-eye"></i>';
-    }
-});
-
-saveApiBtn.addEventListener('click', () => {
-    const key = apiKeyInput.value.trim();
-    if (key) {
-        localStorage.setItem('yt_api_key', key);
-        apiModal.classList.add('hidden');
-
-        // Se havia uma busca pendente/falha, tentamos limpar a tela inicial
-        if (searchInput.value.trim()) {
-            searchForm.dispatchEvent(new Event('submit'));
-        } else {
-            alert('API Key salva com sucesso! Agora você pode buscar músicas acima.');
-        }
-    } else {
-        alert('Por favor, informe uma chave válida.');
-    }
-});
 
 // Helper for decoding HTML entities in YT titles
 function decodeHTML(html) {
@@ -310,13 +260,8 @@ async function performSearch(query, apiKey) {
     } catch (error) {
         console.error("Search Error:", error);
 
-        // Verifica se é erro de cota ou chave inválida
-        if (error.message.includes("API key not valid") || error.message.includes("quota")) {
-            alert("Erro na API Key. Pode ser inválida ou atingiu o limite de consultas.");
-            apiModal.classList.remove('hidden');
-        } else {
-            alert("Erro ao buscar: " + error.message);
-        }
+        // Exibe erro generico focado
+        alert("Erro ao buscar: " + error.message);
 
         loadingState.classList.add('hidden');
         welcomeState.classList.remove('hidden');
@@ -354,3 +299,4 @@ function renderResults(items) {
         resultsGrid.appendChild(card);
     });
 }
+
